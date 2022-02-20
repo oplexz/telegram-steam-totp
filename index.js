@@ -14,7 +14,6 @@ const log = (...args) => {
 
 const SteamTotp = require("steam-totp");
 
-process.env.NTBA_FIX_319 = true;
 const TelegramBot = require("node-telegram-bot-api");
 
 const getAccounts = () => {
