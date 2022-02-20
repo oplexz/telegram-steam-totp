@@ -1,0 +1,4 @@
+node_modules/
+accounts/Steamguard-*
+.env
+log.txt

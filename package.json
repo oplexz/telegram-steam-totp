@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "dotenv": "^16.0.0",
+    "humanize-duration": "^3.27.1",
+    "moment": "^2.29.1",
+    "node-telegram-bot-api": "github:yagop/node-telegram-bot-api",
+    "steam-totp": "^2.1.1"
+  },
+  "name": "tg-steam-2fa",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "oplexz",
+  "license": "ISC",
+  "description": ""
+}
