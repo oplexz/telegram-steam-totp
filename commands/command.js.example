@@ -1,0 +1,10 @@
+module.exports = {
+    data: {
+        name: "",
+        restricted: false
+    },
+
+    run(ctx) {
+
+    }
+}

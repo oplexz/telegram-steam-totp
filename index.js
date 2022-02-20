@@ -1,206 +1,94 @@
-// TODO: Fix this mess
-
 require("dotenv").config();
 
 const fs = require("fs");
 const moment = require("moment");
-const chalk = require("chalk");
-const humanize = require("humanize-duration");
 
 const log = (...args) => {
     fs.appendFileSync("log.txt", `${moment().format()} ${require("util").inspect(args).toString()}\n`)
-    console.log(chalk.gray(moment().format()), ...args);
+    console.log(require("chalk").gray(moment().format()), ...args);
 }
 
-const SteamTotp = require("steam-totp");
-
-const TelegramBot = require("node-telegram-bot-api");
-
-const getAccounts = () => {
-    let accounts = {};
-    try {
-        fs.readdirSync("accounts")
-            .filter(filename => filename.startsWith("Steamguard-"))
-            .forEach(file => {
-                const obj = JSON.parse(fs.readFileSync(`accounts/${file}`, "utf8"));
-                accounts[obj.account_name] = obj;
-            });
-    } catch (err) {
-        log(err);
-        process.exit(1);
-    }
-
-    return accounts;
-}
+const Steam = require("./Steam");
 
 log("Hello World!");
 
-// smh... fix.
-const accountPicker = (opts = {}) => {
-    const inline_keyboard = [];
+const TelegramBot = require("node-telegram-bot-api");
+const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, { polling: true });
 
-    const accounts = getAccounts();
+bot.commands = new Map();
 
-    Object.keys(accounts).forEach(name => {
-        const account = accounts[name];
-        inline_keyboard.push([{
-            text: account.account_name,
-            callback_data: account.account_name
-        }])
-    })
+try {
+    const commandFiles = fs.readdirSync("commands").filter(file => file.endsWith(".js"));
 
-    return [`Pick an account below:`, {
-        reply_markup: JSON.stringify({
-            inline_keyboard: inline_keyboard
-        }),
-        ...opts
-    }]
+    for (const file of commandFiles) {
+        const command = require(`./commands/${file}`);
+        bot.commands.set(command.data.name, command);
+    }
+} catch (error) {
+    log("There was an error during command loading:", error);
 }
 
-const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {
-    polling: true
-});
+bot.on("polling_error", (error) => log(error)); // Can apparently return EFATAL?
 
-bot.on("polling_error", (error) => {
-    log(error); // => "EFATAL" (?)
-});
-
-bot.on("message", (msg) => {
-    const chatId = msg.chat.id;
-    const reply = (...args) => bot.sendMessage(chatId, ...args);
-
+bot.on("message", (ctx) => {
     // This only lets bot_command entities pass
-    if (msg.entities == undefined || msg.entities[0].type != "bot_command") {
-        // log(`[ignored] Message from ${msg.chat.username} (${chatId})`, msg);
-        // reply("I can only understand commands :(\nPlease send a valid command!");
+    if (ctx.entities == undefined || ctx.entities[0].type != "bot_command") return;
+
+    const chatId = ctx.chat.id;
+    const reply = (...args) => bot.sendMessage(chatId, ...args);
+    const text = ctx.text;
+
+    const command = bot.commands.get(text.substring(1, ctx.entities[0].length));
+
+    if (!command) return;
+
+    log(`${ctx.chat.username || ctx.chat.first_name} (${chatId}): ${text}`);
+
+    ctx.bot = bot;
+    ctx.reply = (text, options = {}) => bot.sendMessage(ctx.chat.id, text, options);
+    ctx.argStr = text.substring(ctx.entities[0].length + 1, text.length);
+
+    if (command.data.restricted && !process.env.ALLOWED_IDS.split(" ").map(x => Number(x)).includes(ctx.chat.id)) {
+        ctx.reply("Sorry, you are not allowed to run this command!");
         return;
-    };
+    }
 
-    const isAllowed = (id) => process.env.ALLOWED_IDS.split(" ").map(x => Number(x)).includes(id);
-
-    const text = msg.text;
-
-    if (!text.startsWith("/")) return;
-
-    log(`${msg.chat.username || msg.chat.first_name} (${chatId}): ${text}`);
-
-    const cmd = text.substring(1, msg.entities[0].length);
-    const argStr = text.substring(msg.entities[0].length + 1, text.length);
-
-    switch (cmd) {
-        case "start":
-            reply("Hi!");
-            break;
-
-        case "status":
-            const process = require("process");
-            const os = require("os");
-            reply(`User: <code>${os.userInfo().username}@${os.hostname}</code>\n` +
-                `System uptime: <code>${humanize(os.uptime*1e3, { round: true })}</code>\n` +
-                `Process uptime: <code>${humanize(process.uptime()*1e3, { round: true })}</code>\n` +
-                `Node version: <code>${process.version}</code>`, {
-                    parse_mode: "HTML"
-                });
-            break;
-
-        case "id":
-            reply(chatId);
-            break;
-
-        case "test":
-            reply("Test message with a button", {
-                reply_markup: JSON.stringify({
-                    inline_keyboard: [
-                        [{
-                                text: "X1Y1",
-                                callback_data: "example"
-                            },
-                            {
-                                text: "X2Y1",
-                                callback_data: "example"
-                            }
-                        ],
-                        [{
-                                text: "X1Y2",
-                                callback_data: "example"
-                            },
-                            {
-                                text: "X2Y2",
-                                callback_data: "example"
-                            }
-                        ]
-                    ]
-                })
-            });
-            break;
-
-        case "code":
-            if (!isAllowed(chatId)) {
-                reply("Sorry, you're not whitelisted!");
-                return;
-            }
-
-            reply(...accountPicker());
-
-            // https://steamcommunity.com/profiles/${steamData.steamid}
-            // steamData.account_name
-            // SteamTotp.getAuthCode(steamData.shared_secret)
-
-            break;
-
-        case "creds":
-            if (isAllowed(chatId)) {
-                reply("Sorry, you're not whitelisted!");
-                return;
-            }
-            reply("WIP, come back later!");
-            break;
-
-        case "eval":
-            if (isAllowed(chatId)) {
-                reply("Sorry, you're not whitelisted!");
-                return;
-            }
-
-            let out;
-            try {
-                out = require("util").inspect(eval(argStr)).toString();
-            } catch (e) {
-                out = e.toString();
-            }
-            reply(out);
-            break;
+    try {
+        command.run(ctx);
+    } catch (error) {
+        log(error);
+        ctx.reply("There was an error while executing this command!");
     }
 });
 
 bot.on("callback_query", onCallbackQuery = (callbackQuery) => {
     const action = callbackQuery.data;
-    const msg = callbackQuery.message;
+    const ctx = callbackQuery.message;
 
-    const accounts = getAccounts();
+    const accounts = Steam.accounts;
 
     if (Object.keys(accounts).includes(action)) {
         account = accounts[action];
 
         const text = `Account: <a href="https://steamcommunity.com/profiles/${account.steamid}">${account.account_name}</a>\n` +
-            `Code: <code>${SteamTotp.getAuthCode(account.shared_secret)}</code>\n\n` +
-            `Updated on ` + moment().format("lll") + ` (${Math.floor(Math.random()*1000)})`;
-            // API returns weird stuff when you're updating message with same content, cba to handle => add random number
+            `Code: <code>${Steam.getAuthCode(account.shared_secret)}</code>\n\n` +
+            `Updated on ` + moment().format("lll") + ` (${Math.floor(Math.random() * 1000)})`;
+        // API returns weird stuff when you're updating message with same content, cba to handle => add random number
 
         const opts = {
-            chat_id: msg.chat.id,
-            message_id: msg.message_id,
+            chat_id: ctx.chat.id,
+            message_id: ctx.message_id,
             parse_mode: "HTML",
             reply_markup: JSON.stringify({
                 inline_keyboard: [
                     [{
-                            text: "Back",
-                            callback_data: "accounts"
-                        },
-                        {
-                            text: "Refresh",
-                            callback_data: action
-                        }
+                        text: "Back",
+                        callback_data: "accounts"
+                    },
+                    {
+                        text: "Refresh",
+                        callback_data: action
+                    }
                     ]
                 ]
             })
@@ -209,10 +97,11 @@ bot.on("callback_query", onCallbackQuery = (callbackQuery) => {
 
         bot.editMessageText(text, opts);
     } else if (action == "accounts") {
-        bot.editMessageText(...accountPicker({
-            chat_id: msg.chat.id,
-            message_id: msg.message_id
-        }));
+        bot.editMessageText("Pick an account below:", {
+            ...Steam.accountPicker(),
+            chat_id: ctx.chat.id,
+            message_id: ctx.message_id
+        });
     }
 });
 
