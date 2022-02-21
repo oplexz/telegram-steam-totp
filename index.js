@@ -3,10 +3,7 @@ require("dotenv").config();
 const fs = require("fs");
 const moment = require("moment");
 
-const log = (...args) => {
-    fs.appendFileSync("log.txt", `${moment().format()} ${require("util").inspect(args).toString()}\n`)
-    console.log(require("chalk").gray(moment().format()), ...args);
-}
+const log = (...args) => console.log(require("chalk").gray(moment().format()), ...args);
 
 const Steam = require("./Steam");
 
@@ -28,14 +25,11 @@ try {
     log("There was an error during command loading:", error);
 }
 
-bot.on("polling_error", (error) => log(error)); // Can apparently return EFATAL?
-
 bot.on("message", (ctx) => {
     // This only lets bot_command entities pass
     if (ctx.entities == undefined || ctx.entities[0].type != "bot_command") return;
 
     const chatId = ctx.chat.id;
-    const reply = (...args) => bot.sendMessage(chatId, ...args);
     const text = ctx.text;
 
     const command = bot.commands.get(text.substring(1, ctx.entities[0].length));
@@ -44,9 +38,13 @@ bot.on("message", (ctx) => {
 
     log(`${ctx.chat.username || ctx.chat.first_name} (${chatId}): ${text}`);
 
-    ctx.bot = bot;
-    ctx.reply = (text, options = {}) => bot.sendMessage(ctx.chat.id, text, options);
-    ctx.argStr = text.substring(ctx.entities[0].length + 1, text.length);
+    // Mutating context seems pretty unethic to me... but it gets the job done.
+    Object.assign(ctx, {
+        ...ctx,
+        bot: bot,
+        reply: (text, options = {}) => bot.sendMessage(ctx.chat.id, text, options),
+        argStr: text.substring(ctx.entities[0].length + 1, text.length)
+    });
 
     if (command.data.restricted && !process.env.ALLOWED_IDS.split(" ").map(x => Number(x)).includes(ctx.chat.id)) {
         ctx.reply("Sorry, you are not allowed to run this command!");
@@ -104,6 +102,10 @@ bot.on("callback_query", onCallbackQuery = (callbackQuery) => {
         });
     }
 });
+
+// Haven't encountered these errors yet, but you know... 
+bot.on("polling_error", (error) => log(error));
+bot.on("webhook_error", (error) => log(error));
 
 process.on("SIGINT", function () {
     log("SIGINT receieved, goodbye :)");
