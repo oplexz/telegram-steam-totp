@@ -11,9 +11,18 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start ecosystem.config.js"
+    "start": "pm2 startOrRestart ecosystem.config.js"
   },
   "author": "oplexz",
   "license": "ISC",
-  "description": ""
+  "description": "A simple bot that allows you to receive Steam Guard codes via Telegram",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oplexz/tg-steam-2fa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oplexz/tg-steam-2fa/issues"
+  },
+  "homepage": "https://github.com/oplexz/tg-steam-2fa#readme"
 }
