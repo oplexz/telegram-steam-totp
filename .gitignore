@@ -1,5 +1,4 @@
 node_modules/
 accounts/
 .env
-log.txt
 credentials.txt
