@@ -18,10 +18,10 @@
   "description": "A simple bot that allows you to receive Steam Guard codes via Telegram",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oplexz/tg-steam-2fa.git"
+    "url": "git+https://github.com/oplexz/node-telegram-steamtotp.git"
   },
   "bugs": {
-    "url": "https://github.com/oplexz/tg-steam-2fa/issues"
+    "url": "https://github.com/oplexz/node-telegram-steamtotp/issues"
   },
-  "homepage": "https://github.com/oplexz/tg-steam-2fa#readme"
+  "homepage": "https://github.com/oplexz/node-telegram-steamtotp#readme"
 }
