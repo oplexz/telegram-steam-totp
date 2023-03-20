@@ -11,9 +11,9 @@
   },
   "name": "tg-steam-2fa",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "pm2 startOrRestart ecosystem.config.js"
+    "start": "tsc && node --enable-source-maps --experimental-specifier-resolution=node dist/index.js"
   },
   "author": "oplexz",
   "license": "ISC",
