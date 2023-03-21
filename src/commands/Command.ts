@@ -5,7 +5,6 @@ export default abstract class Command {
     description: string;
 
     constructor(name: string, description: string) {
-        console.log(name, description);
         this.name = name.toLocaleLowerCase();
         this.description = description;
     }
