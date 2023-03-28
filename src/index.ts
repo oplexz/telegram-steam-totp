@@ -15,7 +15,10 @@ async function registerCommands() {
 
     const path = `${__dirname}/commands`;
 
-    globSync("*.js", { cwd: path, ignore: ["Command.js"] }).forEach((fileName) => {
+    logger.debug(path);
+
+    globSync("*", { cwd: path, ignore: ["Command.*"] }).forEach((fileName) => {
+        logger.debug(fileName);
         const command = new (require(`${path}/${fileName}`).default)();
 
         bot.command(command.name, (command.call as (ctx: Context) => void).bind(command));
@@ -33,5 +36,5 @@ registerCommands();
 logger.info("Starting the Telegram bot instance...");
 bot.launch();
 
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+// process.once("SIGINT", () => bot.stop("SIGINT"));
+// process.once("SIGTERM", () => bot.stop("SIGTERM"));
