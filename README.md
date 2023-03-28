@@ -2,16 +2,10 @@
 
 A simple bot that allows you to receive Steam Guard codes via Telegram
 
-### Usage:
-- Clone the repository
-- Rename `.env.example` to `.env` and fill the fields
-- Add accounts to the `accounts` directory (files should start with `Steamguard-`)
-- Install the packages (`npm i`)
-- Install pm2 (`npm i -g pm2`)
-- Run `npm start`
+### Usage
 
-### TODO:
-- Refine
-
-### Problems:
-- pm2 seems to start the process twice? causes error 409
+1. Clone the repository
+2. Rename `.env.example` to `.env` and fill the fields
+3. Add accounts to the `accounts` directory (files should start with `Steamguard-`)
+4. Install required packages (`npm i`)
+5. Run `npm start`
