@@ -1,5 +1,5 @@
-import { Context } from "telegraf";
 import Command from "./Command";
+import { Context } from "telegraf";
 
 export default class Ping extends Command {
     constructor() {
