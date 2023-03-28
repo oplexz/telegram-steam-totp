@@ -15,10 +15,7 @@ async function registerCommands() {
 
     const path = `${__dirname}/commands`;
 
-    logger.debug(path);
-
     globSync("*", { cwd: path, ignore: ["Command.*"] }).forEach((fileName) => {
-        logger.debug(fileName);
         const command = new (require(`${path}/${fileName}`).default)();
 
         bot.command(command.name, (command.call as (ctx: Context) => void).bind(command));
