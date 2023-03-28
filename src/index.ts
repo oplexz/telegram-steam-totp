@@ -3,8 +3,11 @@ import { Logger } from "tslog";
 import * as dotenv from "dotenv";
 import { globSync } from "glob";
 
-const logger = new Logger();
+const logger = new Logger({
+    prettyLogTemplate: "{{dateIsoStr}}\t{{logLevelName}}\t[{{filePathWithLine}}{{name}}]\t"
+});
 logger.silly("Hello World!");
+logger.info("Starting up");
 
 dotenv.config();
 
@@ -26,6 +29,8 @@ async function registerCommands() {
     bot.command("start", async (ctx) => {
         await ctx.reply(`Hello ${ctx.update.message.from.first_name}!`);
     });
+
+    logger.info(`${commandsInfo.size} commands loaded (${Array.from(commandsInfo.keys()).join(", ")})`);
 }
 
 registerCommands();
