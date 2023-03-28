@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "@types/steam-totp": "^2.1.0",
-    "chalk": "^4.1.2",
     "dotenv": "^16.0.0",
     "glob": "^9.3.1",
     "humanize-duration": "^3.27.1",
@@ -14,7 +12,10 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && node --enable-source-maps --experimental-specifier-resolution=node dist/index.js"
+    "dev": "ts-node-dev --watch src ./src/index.ts",
+    "build": "tsc --build", 
+    "clean": "tsc --build --clean",
+    "start": "node --enable-source-maps --experimental-specifier-resolution=node dist/index.js"
   },
   "author": "oplexz",
   "license": "ISC",
@@ -29,6 +30,8 @@
   "homepage": "https://github.com/oplexz/node-telegram-steamtotp#readme",
   "devDependencies": {
     "@types/node": "^18.15.3",
+    "@types/steam-totp": "^2.1.0",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.2"
   },
   "engines": {
