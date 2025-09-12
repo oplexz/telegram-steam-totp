@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "chalk": "^4.1.2",
     "dotenv": "^16.0.0",
     "humanize-duration": "^3.27.1",
     "moment": "^2.29.2",
