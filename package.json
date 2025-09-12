@@ -1,26 +1,26 @@
 {
-  "dependencies": {
-    "dotenv": "^16.0.0",
-    "humanize-duration": "^3.27.1",
-    "moment": "^2.29.2",
-    "node-telegram-bot-api": "github:yagop/node-telegram-bot-api",
-    "steam-totp": "^2.1.2"
-  },
-  "name": "tg-steam-2fa",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "pm2 startOrRestart ecosystem.config.js"
-  },
-  "author": "oplexz",
-  "license": "ISC",
-  "description": "A simple bot that allows you to receive Steam Guard codes via Telegram",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/oplexz/node-telegram-steamtotp.git"
-  },
-  "bugs": {
-    "url": "https://github.com/oplexz/node-telegram-steamtotp/issues"
-  },
-  "homepage": "https://github.com/oplexz/node-telegram-steamtotp#readme"
+    "dependencies": {
+        "dotenv": "^16.0.0",
+        "humanize-duration": "^3.27.1",
+        "moment": "^2.29.2",
+        "node-telegram-bot-api": "github:yagop/node-telegram-bot-api",
+        "steam-totp": "^2.1.2"
+    },
+    "name": "tg-steam-2fa",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "pm2 startOrRestart ecosystem.config.js"
+    },
+    "author": "oplexz",
+    "license": "ISC",
+    "description": "A simple bot that allows you to receive Steam Guard codes via Telegram",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/oplexz/node-telegram-steamtotp.git"
+    },
+    "bugs": {
+        "url": "https://github.com/oplexz/node-telegram-steamtotp/issues"
+    },
+    "homepage": "https://github.com/oplexz/node-telegram-steamtotp#readme"
 }
