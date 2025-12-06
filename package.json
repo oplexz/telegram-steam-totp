@@ -1,9 +1,9 @@
 {
     "dependencies": {
+        "dayjs": "^1.11.18",
         "dotenv": "^17.2.2",
+        "grammy": "^1.38.2",
         "humanize-duration": "^3.33.0",
-        "moment": "^2.30.1",
-        "node-telegram-bot-api": "^0.66.0",
         "steam-totp": "^2.1.2"
     },
     "name": "tg-steam-2fa",
@@ -22,5 +22,15 @@
     "bugs": {
         "url": "https://github.com/oplexz/node-telegram-steamtotp/issues"
     },
-    "homepage": "https://github.com/oplexz/node-telegram-steamtotp#readme"
+    "homepage": "https://github.com/oplexz/node-telegram-steamtotp#readme",
+    "devDependencies": {
+        "@eslint/js": "^9.35.0",
+        "@types/node": "^24.3.1",
+        "@types/steam-totp": "^2.1.2",
+        "@typescript-eslint/eslint-plugin": "^8.43.0",
+        "@typescript-eslint/parser": "^8.43.0",
+        "eslint": "^9.35.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.2"
+    }
 }
