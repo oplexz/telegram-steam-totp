@@ -1,27 +1,34 @@
 {
-  "dependencies": {
-    "chalk": "^4.1.2",
-    "dotenv": "^16.0.0",
-    "humanize-duration": "^3.27.1",
-    "moment": "^2.29.2",
-    "node-telegram-bot-api": "github:yagop/node-telegram-bot-api",
-    "steam-totp": "^2.1.2"
-  },
-  "name": "tg-steam-2fa",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "pm2 startOrRestart ecosystem.config.js"
-  },
-  "author": "oplexz",
-  "license": "ISC",
-  "description": "A simple bot that allows you to receive Steam Guard codes via Telegram",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/oplexz/node-telegram-steamtotp.git"
-  },
-  "bugs": {
-    "url": "https://github.com/oplexz/node-telegram-steamtotp/issues"
-  },
-  "homepage": "https://github.com/oplexz/node-telegram-steamtotp#readme"
+    "dependencies": {
+        "dayjs": "^1.11.19",
+        "dotenv": "^17.2.3",
+        "grammy": "^1.38.4",
+        "humanize-duration": "^3.33.1",
+        "steam-totp": "^2.1.2"
+    },
+    "name": "tg-steam-2fa",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "dev": "ts-node src/index.ts",
+        "lint": "eslint src/**/*.ts"
+    },
+    "author": "Daniil Isakov <daniil.isakov@hotmail.com>",
+    "license": "MIT",
+    "description": "A simple bot that allows you to receive Steam Guard codes via Telegram",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/oplexz/telegram-steam-totp.git"
+    },
+    "homepage": "https://github.com/oplexz/telegram-steam-totp#readme",
+    "devDependencies": {
+        "@eslint/js": "^9.39.1",
+        "@types/node": "^24.10.1",
+        "@types/steam-totp": "^2.1.2",
+        "@typescript-eslint/eslint-plugin": "^8.48.1",
+        "@typescript-eslint/parser": "^8.48.1",
+        "eslint": "^9.39.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
+    }
 }
