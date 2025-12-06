@@ -10,7 +10,8 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "start": "pm2 startOrRestart ecosystem.config.js"
+        "dev": "ts-node src/index.ts",
+        "lint": "eslint src/**/*.ts"
     },
     "author": "oplexz",
     "license": "ISC",
