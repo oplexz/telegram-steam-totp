@@ -13,8 +13,8 @@
         "dev": "ts-node src/index.ts",
         "lint": "eslint src/**/*.ts"
     },
-    "author": "oplexz",
-    "license": "ISC",
+    "author": "Daniil Isakov <daniil.isakov@hotmail.com>",
+    "license": "MIT",
     "description": "A simple bot that allows you to receive Steam Guard codes via Telegram",
     "repository": {
         "type": "git",
