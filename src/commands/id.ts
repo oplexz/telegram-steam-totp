@@ -1,7 +1,7 @@
 import { Command } from '../utils/commandLoader';
 
 export const name = 'id';
-export const description = 'Get your Telegram user/chat ID';
+export const description = 'Get your Telegram user ID';
 export const restricted = false;
 
 export const execute: Command['execute'] = async (ctx): Promise<void> => {

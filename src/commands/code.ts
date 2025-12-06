@@ -4,7 +4,7 @@ import { Context } from 'grammy';
 import { SteamService } from '../services/SteamService';
 
 export const name = 'code';
-export const description = 'Get Steam Guard codes for your accounts';
+export const description = 'Get Steam Guard codes';
 export const restricted = true;
 
 export const execute: Command['execute'] = async (ctx, steamService) => {

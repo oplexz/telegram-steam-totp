@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 import { Command } from '../utils/commandLoader';
 
 export const name = 'status';
-export const description = 'Get system and process status information';
+export const description = 'System and process status';
 export const restricted = false;
 
 export const execute: Command['execute'] = async (ctx): Promise<void> => {
